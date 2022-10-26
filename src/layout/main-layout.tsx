@@ -9,6 +9,8 @@ import {
   ButtonsContainer,
   CommandContainer,
   CommandInput,
+  Footer,
+  FooterContent,
   LogCommand,
   LogMessage,
   LogoContainer,
@@ -18,10 +20,11 @@ import {
   SuggestedCommands,
 } from "./main-layout.styles";
 import IeSvg from "../icons/ie.svg";
-import DimensionHelper from "../util/dimension-helper";
 import FileUploader from "../components/uploader/uploader";
 import { IUploadedFile } from "../components/uploader/uploader.types";
 import { IProcessCommandResult } from "../util/pacman-processor";
+import DimensionHelper from "../util/dimension-helper";
+import OmniscientIcon from "../icons/omniscient";
 
 const MainLayout = () => {
   const { position, direction, processCommand, processCommands, report, logs } =
@@ -35,13 +38,14 @@ const MainLayout = () => {
   const inputShaking = shaking && !!errorMessage;
   const [openUploader, setOpenUploader] = React.useState<number>(0);
 
+  const { isMobile, isTabletOrMobile } = DimensionHelper();
+
   const logsEndRef = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
-    logsEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    if (logsEndRef.current?.scrollIntoView)
+      logsEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [logs?.length]);
-
-  const { isWideDesktop, isDesktop } = DimensionHelper();
 
   const handleCommandResult = (result: IProcessCommandResult) => {
     setShake(result.result ? 0 : shake + 1);
@@ -100,19 +104,18 @@ const MainLayout = () => {
 
   return (
     <Maintainer>
-      <LogoContainer>
+      <LogoContainer isSmallScreen={isTabletOrMobile}>
         <img src={IeSvg} alt="ie" style={{ maxWidth: "100%" }} />
       </LogoContainer>
       <BoardContainer>
         <Board shake={shaking} />
-        <LogsContainer
-          style={{
-            width: isWideDesktop ? "14vw" : isDesktop ? "17vw" : "20vw",
-          }}>
+        <LogsContainer>
           {logs.map((log, index) => (
             <React.Fragment key={index}>
               <LogCommand>{log.command}</LogCommand>
-              <LogMessage invalid={!!log.invalidCommand}>
+              <LogMessage
+                invalid={!!log.invalidCommand}
+                data-testid="log-message">
                 {log.message}
               </LogMessage>
             </React.Fragment>
@@ -120,9 +123,12 @@ const MainLayout = () => {
           <div ref={logsEndRef}></div>
         </LogsContainer>
       </BoardContainer>
-      <ReportContainer report={report}>{report ?? ""}</ReportContainer>
-      <CommandContainer>
+      <ReportContainer report={report} isMobile={isMobile}>
+        {report ?? ""}
+      </ReportContainer>
+      <CommandContainer isMobile={isMobile}>
         <CommandInput
+          placeholder="Write you command, then press Enter or click on the EXECUTE button"
           className={inputShaking ? " shake " : ""}
           style={{
             borderColor: inputShaking ? "red" : undefined,
@@ -134,20 +140,24 @@ const MainLayout = () => {
           onKeyDown={handleEnterKey}
         />
       </CommandContainer>
-      <SuggestedCommands>
+      <SuggestedCommands data-testid="suggested-commands" isMobile={isMobile}>
         {validCommands.map(c => (
-          <div key={c} onClick={() => handleSuggestedCommandClick(c ?? "")}>
+          <div
+            key={c}
+            onClick={() => handleSuggestedCommandClick(c ?? "")}
+            data-testid="suggested-command">
             {c}
           </div>
         ))}
       </SuggestedCommands>
-      <ButtonsContainer>
+      <ButtonsContainer isMobile={isMobile}>
         <Button
           variant="contained"
           size="small"
           disabled={!command.trim()}
           onClick={() => handleCommand()}
-          style={{ width: "10rem" }}>
+          style={{ width: "10rem" }}
+          aria-label="execute">
           Execute
         </Button>
         <Button
@@ -158,6 +168,33 @@ const MainLayout = () => {
         </Button>
         <FileUploader open={openUploader} onUpload={handleUploadedFile} />
       </ButtonsContainer>
+      <Footer>
+        <FooterContent>
+          <div className="profile-pic">
+            <OmniscientIcon size={40} />
+          </div>
+          <div className="content">
+            <div>Hey, IE!</div>
+            <div>
+              I am Osi, the omniscient! I have found the best candidate for you.
+            </div>
+            <div>
+              His name is{" "}
+              <span
+                style={{
+                  fontStyle: "italic",
+                  margin: "0 0.3rem",
+                  fontWeight: "bold",
+                }}>
+                `Ramin Yavari`.
+              </span>
+              {
+                "You know how to find him. Don't waste your time and contact him as soon as possible :)"
+              }
+            </div>
+          </div>
+        </FooterContent>
+      </Footer>
     </Maintainer>
   );
 };

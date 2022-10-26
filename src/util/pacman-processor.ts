@@ -118,6 +118,8 @@ export class PacmanProcessor {
   processCommand(command: string): IProcessCommandResult {
     this.report = undefined;
 
+    const notPlaced = !this.position?.X || !this.position?.Y || !this.direction;
+
     if (validators.validatePlace(command)) {
       const [x, y, dir] = command
         .split(" ")
@@ -129,22 +131,26 @@ export class PacmanProcessor {
       return {
         command,
         result: this.place(+x + 1, +y + 1, dir),
-        message: `placed on ${x}-${y} toward ${this.direction}`,
+        message: `placed on ${x}-${y} facing ${this.direction}`,
       };
     } else if (validators.validateMove(command)) {
-      const result = this.move();
+      const result = !notPlaced && this.move();
       return {
         command,
         result,
         message: result
           ? `went one step toward ${this.direction}`
+          : notPlaced
+          ? "execute PLACE command first"
           : "cannot move further",
       };
     } else if (validators.validateRotate(command)) {
       return {
         command,
-        result: this.rotate(command),
-        message: `rotated to ${command.toUpperCase()}`,
+        result: !notPlaced && this.rotate(command),
+        message: notPlaced
+          ? "execute PLACE command first"
+          : `rotated to ${command.toUpperCase()}`,
       };
     } else if (validators.validateReport(command)) {
       if (this.position?.X && this.position.Y && this.direction)

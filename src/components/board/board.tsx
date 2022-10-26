@@ -6,16 +6,17 @@ import { Cell, Container, PacmanHead, PacmanMouth } from "./board.styles";
 
 const CELLS_NO = Math.pow(BOARD_ROW_LENGTH, 2);
 
-const Board = ({ shake }: { shake: boolean }) => {
+const Board = ({ shake }: { shake?: boolean }) => {
   const { position, direction, processCommand } = usePacman();
 
   return (
-    <Container>
+    <Container data-testid="board">
       {position?.X && position?.Y && direction && (
         <PacmanHead
           className={shake ? "shake" : ""}
           x={position.X}
-          y={position.Y}>
+          y={position.Y}
+          data-testid="pacman-head">
           <PacmanMouth direction={direction} />
         </PacmanHead>
       )}
@@ -37,7 +38,8 @@ const Board = ({ shake }: { shake: boolean }) => {
               !clickable
                 ? undefined
                 : () => processCommand(`PLACE ${x - 1}, ${y - 1}, ${direction}`)
-            }>{`${x}-${y}`}</Cell>
+            }
+          />
         );
       })}
     </Container>

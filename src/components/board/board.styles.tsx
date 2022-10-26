@@ -3,6 +3,7 @@ import {
   BOARD_ROW_LENGTH,
   IDirection,
 } from "../../context/pacman/pacman-provider.types";
+import { MAX_BOARD_HEIGHT } from "../../layout/main-layout.styles";
 import { ThemeColors } from "../../styles/themes";
 
 const Margin = 0.2;
@@ -34,9 +35,9 @@ const calculateMouthMargin = (
 export const Container = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-  max-height: 100%;
   position: relative;
   box-shadow: 0 0 3rem #ccc;
+  height: ${MAX_BOARD_HEIGHT};
 `;
 
 export const Cell = styled.div<{
