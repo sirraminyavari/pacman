@@ -36,7 +36,7 @@ const Board = ({ shake }: { shake: boolean }) => {
             onClick={
               !clickable
                 ? undefined
-                : () => processCommand(`PLACE ${x}, ${y}, ${direction}`)
+                : () => processCommand(`PLACE ${x - 1}, ${y - 1}, ${direction}`)
             }>{`${x}-${y}`}</Cell>
         );
       })}

@@ -6,7 +6,7 @@ export const Maintainer = styled.div`
   flex-flow: column;
   gap: 1rem;
   padding: 1rem;
-  height: 100vh;
+  min-height: 100vh;
   position: relative;
 
   background-image: linear-gradient(90deg, #9af7ff, #2edae9);
@@ -25,10 +25,32 @@ export const LogoContainer = styled.div`
 export const BoardContainer = styled.div`
   flex: 0 0 auto;
   display: flex;
+  flex-flow: row;
   height: 40vw;
   max-height: 60vh;
   align-items: center;
   justify-content: center;
+  gap: 4rem;
+`;
+
+export const LogsContainer = styled.div`
+  flex: 0 0 auto;
+  overflow: auto;
+  max-height: 17rem;
+`;
+
+export const LogCommand = styled.div`
+  font-size: 0.7rem;
+  font-weight: 700;
+`;
+
+export const LogMessage = styled.div<{
+  invalid: boolean;
+}>`
+  font-size: 0.7rem;
+  font-style: italic;
+  margin-bottom: 0.5rem;
+  color: ${({ invalid }) => (invalid ? "red" : "black")};
 `;
 
 export const CommandContainer = styled.div`
@@ -81,4 +103,9 @@ export const SuggestedCommands = styled(CommandContainer)`
       background-color: ${ThemeColors.Gray};
     }
   }
+`;
+
+export const ButtonsContainer = styled(CommandContainer)`
+  flex-flow: row;
+  gap: 1rem;
 `;

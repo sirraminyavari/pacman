@@ -2,7 +2,9 @@ import { BOARD_ROW_LENGTH } from "./pacman-provider.types";
 
 export const validatePlace = (command: string): boolean =>
   new RegExp(
-    `^place\\s+[1-${BOARD_ROW_LENGTH}]\\s*,\\s*[1-${BOARD_ROW_LENGTH}]\\s*,\\s*((north)|(west)|(south)|(east))$`,
+    `^place\\s+[0-${BOARD_ROW_LENGTH - 1}]\\s*,\\s*[0-${
+      BOARD_ROW_LENGTH - 1
+    }]\\s*,\\s*((north)|(west)|(south)|(east))$`,
     "gi",
   ).test(command);
 
