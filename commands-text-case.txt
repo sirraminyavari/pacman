@@ -1,0 +1,12 @@
+PLACE 1, 1, NORTH
+asdflasdfjas
+asd;flasdjf;ajsd;lfasd
+REPORT
+Place 2,4,    SOUTH
+MOVE
+LEFT
+MOVE
+asdfadsfasdfsa
+MOVE
+MOVE1
+REPORT
